@@ -15,7 +15,8 @@ install_requires = [
     'flask-restful',
     'Flask-HTTPAuth',
     'Flask-Script',
-    'pyjwt',
+    'Flask-Login',
+    'pyjwt'
 ]
 
 barman_api = {}
