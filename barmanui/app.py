@@ -1,40 +1,30 @@
-
-
-from flask import Flask, render_template,request
-from flask.ext.login import LoginManager, login_required
+from flask import Flask, render_template, request, redirect
+from flask.ext.login import LoginManager, login_required, login_user, logout_user
 from flask.ext.restful import Api
 from flask.ext.script import Manager
 
-from auth import User
+from auth import User, AuthBase
+from server import Server
+from rest import Rest
 from parser import ConfigParser
 
 app = Flask(__name__, instance_relative_config=True)
 api = Api(app)
+app.secret_key = 'super secret key'
 manager = Manager(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
-config_main = ConfigParser('/etc/barmanui.conf')
+app.config.config_main = ConfigParser('/etc/barmanui.conf')
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get(user_id)
+    return User().get()
 
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    return render_template('login.html')
-
-
-# auth_token = HTTPTokenAuth(scheme='Barman')
-
-
-# class Auth(AuthBase):
-#     decorators = [auth_token.login_required]
-#     pass
-#
-#
-# api.add_resource(Auth, '/auth/<command>', methods=['GET', 'POST'])
+    return render_template('login.html', request=request)
 
 
 @app.route("/")
@@ -43,27 +33,31 @@ def hello():
     return render_template('index.html')
 
 
-@app.route("/login", methods=['POST'])
-def login():
-    password = request.form.get('inputPassword')
-    username = request.form.get('inputUsername')
-    user = User.get(username,password)
+@app.route("/server")
+@login_required
+def server():
+    server = Server()
+    return server.server_list()
 
-    # user = User.query.get(form.email.data)
-    # if user:
-    #     if bcrypt.check_password_hash(user.password, form.password.data):
-    #         user.authenticated = True
-    #         db.session.add(user)
-    #         db.session.commit()
-    #         login_user(user, remember=True)
-    #         return redirect(url_for("bull.reports"))
 
-    return 'dfdssdf'
+@app.route("/server/<command>")
+@login_required
+def server_command(command):
+    server = Server()
+    server.get_command(command)
+    return render_template('list.html', list=Server().server_list())
 
 
 @app.route("/logout")
 def logout():
-    pass
+    AuthBase.logout()
+    return redirect('/')
+
+
+@app.route("/login", methods=['POST'])
+def login():
+    AuthBase.login()
+    return redirect(request.form.get('request_url'))
 
 
 @manager.command

@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">{{ panel_header }}</div>
+
+        <!-- Table -->
+        <table class="table">
+            <thead>
+
+            {%- for msg in table_header %}
+                <th>{{ msg }}</th>
+
+            {% endfor -%}
+            </thead>
+
+            {%- for msg in list %}
+                <tr>
+                    {%- for val in msg %}
+                        {%- if val == 'settings' %}
+                            <td>
+                                {%- for val_setting in msg.get(val) %}
+                                    <a href="#" data-target="{{ val_setting.get('token') }}"> <span
+                                            class="glyphicon glyphicon-{{ val_setting.get('icon') }}"></span></a>
+                                {% endfor -%}
+                            </td>
+                        {%- else %}
+                            <td>{{ msg.get(val) }}</td>
+                        {% endif -%}
+
+
+                    {% endfor -%}
+                </tr>
+            {% endfor -%}
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
