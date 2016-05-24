@@ -1,5 +1,5 @@
 from rest import Rest
-from flask import request, render_template
+from flask import request, render_template, flash
 
 
 class Server(Rest):
@@ -9,10 +9,11 @@ class Server(Rest):
 
     def server_list(self):
         server_list = self.get_with_token('/barman/list-server')
+        return_list = []
         if server_list.get('code') > 0:
-            print 'Hata'
+            flash(server_list.get('err'), 'error')
+            # return ""
         else:
-            return_list = []
             list_send = server_list.get('message')
             i = 0
             for message in list_send:

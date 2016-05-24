@@ -1,3 +1,4 @@
+from flask import flash
 from flask.ext.login import UserMixin
 
 from baseexception import BaseBarmanUIException
@@ -15,12 +16,16 @@ class AuthBase(Resource):
         user = User()
         user.username = username
         user.password = password
-        rest = Rest()
-        user.other = rest.get('/auth/user')
         remember = False
         if request.form.get('remember_me') == 'on':
             remember = True
         login_user(user, remember=remember)
+        rest = Rest()
+        user.other = rest.get('/auth/user')
+        # login_user(user, remember=remember)
+        if user.other.get('message'):
+            flash(user.other.get('message'), 'error')
+            logout_user()
 
     @staticmethod
     def logout():
@@ -34,9 +39,11 @@ class User(UserMixin):
     other = {}
 
     def get_id(self):
-        return self.username
+        return [self.username, self.password]
 
-    def get(self):
+    def get(self, id):
+        self.username = id[0]
+        self.password = id[1]
         return self
 
     # Required for administrative interface

@@ -1,6 +1,7 @@
 import requests
 
-from flask import current_app, flash
+from flask import current_app, flash, g
+from flask.ext.login import current_user
 
 
 class Rest(object):
@@ -9,8 +10,8 @@ class Rest(object):
 
     def __init__(self):
         self.api_config = current_app.config.config_main.read_section('barmanapi')
-        self.url = 'http://' + self.api_config.get('user') + ':' + self.api_config.get(
-            'password') + '@' + self.api_config.get(
+        self.url = 'http://' + str(current_user.username) + ':' + str(
+            current_user.password) + '@' + self.api_config.get(
             'url')
 
     def get_token(self):
@@ -21,14 +22,14 @@ class Rest(object):
         try:
             r = requests.get(self.url + uri)
             return r.json()
-        except:
-            flash('Test', 'error')
+        except Exception as e:
+            flash(str(e.message), 'error')
         return {}
 
     def get_with_token(self, uri, params=''):
         try:
-            r = requests.get(self.url + uri + '?token=' + str(self.get_token())+'&'+params)
+            r = requests.get(self.url + uri + '?token=' + str(self.get_token()) + '&' + params)
             return r.json()
-        except:
+        except Exception as e:
             flash('Test', 'error')
         return {}

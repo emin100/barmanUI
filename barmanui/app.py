@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, redirect
-from flask.ext.login import LoginManager, login_required, login_user, logout_user
+from flask import Flask, render_template, request, redirect, g
+from flask.ext.login import LoginManager, login_required, current_user
 from flask.ext.restful import Api
 from flask.ext.script import Manager
 
@@ -17,9 +17,15 @@ login_manager.init_app(app)
 app.config.config_main = ConfigParser('/etc/barmanui.conf')
 
 
+# @app.before_request
+# def before_request():
+#     print current_user.username
+#     g.user = current_user
+
+
 @login_manager.user_loader
 def load_user(user_id):
-    return User().get()
+    return User().get(user_id)
 
 
 @login_manager.unauthorized_handler
