@@ -51,7 +51,7 @@
 
 </style>
 
-<form class="form-signin" method="post" action="{{url_for('login')}}">
+<form class="form-signin" method="post" action="{{url_for('auth.login')}}">
     <h2 class="form-signin-heading">Please sign in</h2>
 
     <input type="hidden" name="request_url" id="request_url" value="{{ request.path }}">
