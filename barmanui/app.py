@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from flask.ext.bootstrap import Bootstrap
 from flask.ext.login import LoginManager
 from flask.ext.script import Manager
 
@@ -13,6 +14,7 @@ from server.controllers import server
 app = Flask(__name__)
 app.secret_key = 'super secret key'
 manager = Manager(app)
+Bootstrap(app)
 
 app.config.config_main = ConfigParser('/etc/barmanui.conf')
 

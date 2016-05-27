@@ -14,10 +14,8 @@ def server_list():
     print list_server
 
     list_return = []
-    if list_server.get('code') > 0 or list_server.get('status_code') > 0:
-        flash(list_server.get('err') + list_server.get('message'), 'error')
-    else:
-        list_send = list_server.get('message')
+    if list_server.get('status_code') == 200:
+        list_send = list_server.get('list')
         i = 0
         for message in list_send:
             if message != '':
@@ -25,5 +23,7 @@ def server_list():
                 list_return.append({'name': message[0], 'desc': message[1], 'settings': [
                     {'icon': 'stats', 'target': '/server/status'}]})
                 i += 1
+    else:
+        flash(list_server.get('message'), 'error')
     return render_template('list.html', list=list_return, panel_header='Server List',
-                           table_header=['Name', 'Description', '#'])
+                           table_header=['Name', 'Description', '#'], order=['name', 'desc', 'settings'])

@@ -9,14 +9,15 @@ except ImportError:
     from distutils.core import setup
 
 if sys.version_info < (2, 6):
-    raise SystemExit('ERROR: Barman Api needs at least python 2.6 to work')
+    raise SystemExit('ERROR: Barman UI needs at least python 2.6 to work')
 
 install_requires = [
-    'flask-restful',
-    'Flask-HTTPAuth',
+    'flask',
     'Flask-Script',
     'Flask-Login',
-    'pyjwt'
+    'Flask-bootstrap',
+    'flask-nav',
+    'flask-wtf'
 ]
 
 barman_api = {}
