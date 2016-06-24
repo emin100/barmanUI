@@ -17,7 +17,8 @@ install_requires = [
     'Flask-Login',
     'Flask-bootstrap',
     'flask-nav',
-    'flask-wtf'
+    'flask-wtf',
+    'requests'
 ]
 
 barman_api = {}

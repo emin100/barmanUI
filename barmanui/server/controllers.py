@@ -11,7 +11,6 @@ server = Blueprint('server', __name__, url_prefix='/server')
 def server_list():
     rest = Rest()
     list_server = rest.get_with_token('/barman/list-server')
-    print list_server
 
     list_return = []
     if list_server.get('status_code') == 200:

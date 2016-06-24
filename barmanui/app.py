@@ -16,7 +16,7 @@ app.secret_key = 'super secret key'
 manager = Manager(app)
 Bootstrap(app)
 
-app.config.config_main = ConfigParser('/etc/barmanui.conf')
+app.config.config_main = ConfigParser('../config/barmanui.conf')
 
 
 # Sample HTTP error handling
@@ -31,7 +31,6 @@ app.register_blueprint(server)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-app.config.config_main = ConfigParser('/etc/barmanui.conf')
 
 
 @login_manager.user_loader
@@ -46,9 +45,13 @@ def unauthorized():
 
 @manager.command
 def runserver():
-    """Start BARMAN UI Server"""
-
-    app.run(debug=True)
+    """Start BARMAN API Server"""
+    app.config.update(
+        DEBUG=eval(app.config.config_main.get('application', 'debug')),
+        PROPAGATE_EXCEPTIONS=True
+    )
+    app.run(port=int(app.config.config_main.get('application', 'port')),
+            host=app.config.config_main.get('application', 'host'))
 
 
 def main():
