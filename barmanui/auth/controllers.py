@@ -1,7 +1,7 @@
 # Import flask dependencies
 from flask import Blueprint, request, render_template, \
                   flash, g, session, redirect, url_for
-from flask.ext.login import login_user, logout_user
+from flask_login import login_user, logout_user
 
 from auth.models import User
 from baseexception import BaseBarmanUIException

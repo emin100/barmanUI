@@ -20,7 +20,7 @@
                 {%- if val == 'settings' %}
                 <td>
                     {%- for val_setting in msg.get(val) %}
-                    <a href="#" data-target="{{ val_setting.get('target') }}"> <span
+                    <a href="#" url="{{ val_setting.get('target') }}" data-toggle="modal"> <span
                             class="glyphicon glyphicon-{{ val_setting.get('icon') }}"></span></a>
                     {% endfor -%}
                 </td>
@@ -36,3 +36,26 @@
         </table>
     </div>
 </div>
+    <script type="text/javascript">
+        $(function () {
+            $('[data-toggle="modal"]').click(function(e) {
+        e.preventDefault();
+        var data_target="#modal"+parseInt(Math.random()*1000);
+        var url = $(this).attr('url');
+        if (url.indexOf('#') == 0) {
+            $(url).modal('open');
+        } else {
+            $.get(url, function(data) {
+                        $('<div class="modal hide fade" id="'+data_target.replace("#","")+'">' + data + '</div>')
+                                .modal()
+                                .on('hidden', function(){
+                                        $(data_target).remove();
+                                 });
+                    }).success(function() {
+                        $('input:text:visible:first').focus();
+                    });
+        }
+    });
+        });
+
+    </script>

@@ -1,7 +1,7 @@
 import requests
 
 from flask import current_app, flash, g
-from flask.ext.login import current_user
+from flask_login import current_user
 
 
 class Rest(object):

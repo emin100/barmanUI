@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
-from flask.ext.bootstrap import Bootstrap
-from flask.ext.login import LoginManager
-from flask.ext.script import Manager
+from flask_bootstrap import Bootstrap
+from flask_login import LoginManager
+from flask_script import Manager
 
 from auth.models import User
 from parser import ConfigParser
